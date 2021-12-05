@@ -7,13 +7,21 @@ const Main = () => {
     const [query, setQuery] = useState('redux');
     const [url, setUrl] = useState('https://hn.algolia.com/api/v1/search?query=redux');
     const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
-            const result = await axios(url);
+            setIsError(false);
+            try{
+                const result = await axios(url);
+                setdata(result.data);
 
-            setdata(result.data);
+            } catch (error) {
+                setIsError(true);
+            }
+            
+            
             setIsLoading(false);
 
         }
@@ -33,6 +41,8 @@ const Main = () => {
             <button type="button" 
             onClick={() => setUrl(`https://hn.algolia.com/api/v1/search?query=${query}`)}>Search</button>
 
+
+{isError && <div>An Error occured...</div>}
 
 {
     isLoading ? (
